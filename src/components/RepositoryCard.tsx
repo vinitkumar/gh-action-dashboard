@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 import { Repository, WorkflowRun } from '@/types/github';
 import WorkflowRunCard from './WorkflowRunCard';
 import { timeAgo, truncateText } from '@/lib/utils';
@@ -14,11 +15,15 @@ const RepositoryCard: React.FC<RepositoryCardProps> = ({ repository, workflowRun
       <div className="p-4 border-b border-gray-200 dark:border-gray-700">
         <div className="flex items-center justify-between">
           <div className="flex items-center">
-            <img 
-              src={repository.owner.avatar_url} 
-              alt={repository.owner.login}
-              className="w-8 h-8 rounded-full mr-2"
-            />
+            <div className="relative w-8 h-8 mr-2">
+              <Image 
+                src={repository.owner.avatar_url} 
+                alt={repository.owner.login}
+                className="rounded-full"
+                fill
+                sizes="32px"
+              />
+            </div>
             <div>
               <h2 className="text-xl font-bold text-gray-800 dark:text-white">
                 {repository.name}

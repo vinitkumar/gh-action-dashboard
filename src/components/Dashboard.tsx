@@ -52,6 +52,7 @@ const Dashboard: React.FC<DashboardProps> = ({ token, org, onLogout }) => {
   // Initial data fetch
   useEffect(() => {
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token, org]);
   
   // Auto-refresh
@@ -67,6 +68,7 @@ const Dashboard: React.FC<DashboardProps> = ({ token, org, onLogout }) => {
     return () => {
       if (intervalId) clearInterval(intervalId);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [autoRefresh, token, org]);
   
   return (

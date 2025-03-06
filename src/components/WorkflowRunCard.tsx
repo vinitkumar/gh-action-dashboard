@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 import { WorkflowRun } from '@/types/github';
 import { getStatusColor, getStatusIcon, timeAgo, truncateText } from '@/lib/utils';
 
@@ -33,11 +34,15 @@ const WorkflowRunCard: React.FC<WorkflowRunCardProps> = ({ workflowRun }) => {
         
         <div className="flex items-center justify-between text-sm">
           <div className="flex items-center">
-            <img 
-              src={workflowRun.actor.avatar_url} 
-              alt={workflowRun.actor.login}
-              className="w-5 h-5 rounded-full mr-1"
-            />
+            <div className="relative w-5 h-5 mr-1">
+              <Image 
+                src={workflowRun.actor.avatar_url} 
+                alt={workflowRun.actor.login}
+                className="rounded-full"
+                fill
+                sizes="20px"
+              />
+            </div>
             <span className="text-gray-600 dark:text-gray-300">
               {workflowRun.actor.login}
             </span>

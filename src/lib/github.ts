@@ -1,9 +1,7 @@
 import { Octokit } from 'octokit';
-import { createTokenAuth } from '@octokit/auth-token';
 
 // Initialize Octokit with a personal access token
 export const getOctokit = (token: string) => {
-  const auth = createTokenAuth(token);
   return new Octokit({ auth: token });
 };
 

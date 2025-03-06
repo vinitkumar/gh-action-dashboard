@@ -7,7 +7,6 @@ import { DEFAULT_ORG, GITHUB_TOKEN } from '@/config';
 export default function Home() {
   const [token, setToken] = useState<string>(GITHUB_TOKEN);
   const [org] = useState<string>(DEFAULT_ORG);
-  const [isLoading, setIsLoading] = useState(false);
   
   // Check for saved token in localStorage as fallback
   useEffect(() => {

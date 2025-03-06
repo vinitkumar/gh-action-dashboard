@@ -1,12 +1,12 @@
-# GitHub Actions Dashboard
+# GitHub Actions Dashboard for django-cms
 
-A modern dashboard to monitor GitHub Actions workflows across your organization's repositories.
+A modern dashboard to monitor GitHub Actions workflows across the django-cms organization's repositories.
 
 ## Features
 
-- View GitHub Actions workflow runs for repositories in your organization
+- View GitHub Actions workflow runs for repositories in the django-cms organization
 - Real-time status updates with auto-refresh
-- Secure authentication using GitHub personal access tokens (stored locally)
+- Secure authentication using GitHub personal access tokens (stored in environment variables)
 - Responsive design for desktop and mobile
 - Dark mode support
 
@@ -16,6 +16,7 @@ A modern dashboard to monitor GitHub Actions workflows across your organization'
 
 - Node.js 18.x or later
 - npm or yarn
+- GitHub Personal Access Token with appropriate permissions
 
 ### Installation
 
@@ -34,7 +35,13 @@ npm install
 yarn install
 ```
 
-3. Start the development server:
+3. Set up your GitHub token in `.env.local`:
+
+```
+NEXT_PUBLIC_GITHUB_TOKEN=your_github_token_here
+```
+
+4. Start the development server:
 
 ```bash
 npm run dev
@@ -42,7 +49,7 @@ npm run dev
 yarn dev
 ```
 
-4. Open [http://localhost:3000](http://localhost:3000) in your browser.
+5. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ### GitHub Token
 
@@ -52,13 +59,9 @@ To use this dashboard, you'll need a GitHub personal access token with the follo
 
 You can create a token at [GitHub Developer Settings](https://github.com/settings/tokens).
 
-## Environment Variables
+## Configuration
 
-You can set the following environment variables in a `.env.local` file:
-
-```
-NEXT_PUBLIC_GITHUB_ORG=your-organization-name
-```
+The dashboard is configured to display GitHub Actions data for the django-cms organization by default. This is hardcoded in the application.
 
 ## Deployment
 
@@ -66,10 +69,12 @@ This application can be easily deployed to Vercel:
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fyourusername%2Fgh-action-dashboard)
 
+Make sure to add the `NEXT_PUBLIC_GITHUB_TOKEN` environment variable in your deployment settings.
+
 ## Security
 
-- GitHub tokens are stored only in the browser's localStorage and are never sent to any server other than GitHub's API
-- API requests are made directly from the client to GitHub's API
+- GitHub tokens are stored in environment variables or the browser's localStorage as a fallback
+- API requests are made directly from the client to GitHub's API using your token
 
 ## License
 
