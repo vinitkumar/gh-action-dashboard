@@ -1,5 +1,8 @@
 // Format date to a readable format
-export function formatDate(dateString: string): string {
+export function formatDate(dateString: string | null | undefined): string {
+  if (!dateString) {
+    return 'N/A';
+  }
   const date = new Date(dateString);
   return new Intl.DateTimeFormat('en-US', {
     year: 'numeric',
@@ -11,7 +14,11 @@ export function formatDate(dateString: string): string {
 }
 
 // Calculate time elapsed since a given date
-export function timeAgo(dateString: string): string {
+export function timeAgo(dateString: string | null | undefined): string {
+  if (!dateString) {
+    return 'Never';
+  }
+  
   const date = new Date(dateString);
   const now = new Date();
   const seconds = Math.floor((now.getTime() - date.getTime()) / 1000);
@@ -45,7 +52,11 @@ export function timeAgo(dateString: string): string {
 }
 
 // Get status color based on workflow status and conclusion
-export function getStatusColor(status: string, conclusion: string | null): string {
+export function getStatusColor(status: string | null, conclusion: string | null): string {
+  if (!status) {
+    return 'bg-gray-500';
+  }
+  
   if (status === 'completed') {
     switch (conclusion) {
       case 'success':
@@ -77,7 +88,11 @@ export function truncateText(text: string, maxLength: number): string {
 }
 
 // Get status icon based on workflow status and conclusion
-export function getStatusIcon(status: string, conclusion: string | null): string {
+export function getStatusIcon(status: string | null, conclusion: string | null): string {
+  if (!status) {
+    return '❓';
+  }
+  
   if (status === 'completed') {
     switch (conclusion) {
       case 'success':

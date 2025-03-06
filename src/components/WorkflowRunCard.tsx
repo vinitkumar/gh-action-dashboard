@@ -18,7 +18,7 @@ const WorkflowRunCard: React.FC<WorkflowRunCardProps> = ({ workflowRun }) => {
           <div className="flex items-center">
             <div className={`w-3 h-3 rounded-full mr-2 ${statusColor}`}></div>
             <h3 className="text-lg font-semibold text-gray-800 dark:text-white">
-              {workflowRun.name}
+              {workflowRun.name || 'Unnamed Workflow'}
             </h3>
           </div>
           <span className="text-sm text-gray-500 dark:text-gray-400">
@@ -26,27 +26,35 @@ const WorkflowRunCard: React.FC<WorkflowRunCardProps> = ({ workflowRun }) => {
           </span>
         </div>
         
-        <div className="mb-3">
-          <p className="text-sm text-gray-600 dark:text-gray-300">
-            {truncateText(workflowRun.head_commit.message, 60)}
-          </p>
-        </div>
+        {workflowRun.head_commit && (
+          <div className="mb-3">
+            <p className="text-sm text-gray-600 dark:text-gray-300">
+              {truncateText(workflowRun.head_commit.message, 60)}
+            </p>
+          </div>
+        )}
         
         <div className="flex items-center justify-between text-sm">
-          <div className="flex items-center">
-            <div className="relative w-5 h-5 mr-1">
-              <Image 
-                src={workflowRun.actor.avatar_url} 
-                alt={workflowRun.actor.login}
-                className="rounded-full"
-                fill
-                sizes="20px"
-              />
+          {workflowRun.actor ? (
+            <div className="flex items-center">
+              <div className="relative w-5 h-5 mr-1">
+                <Image 
+                  src={workflowRun.actor.avatar_url} 
+                  alt={workflowRun.actor.login}
+                  className="rounded-full"
+                  fill
+                  sizes="20px"
+                />
+              </div>
+              <span className="text-gray-600 dark:text-gray-300">
+                {workflowRun.actor.login}
+              </span>
             </div>
-            <span className="text-gray-600 dark:text-gray-300">
-              {workflowRun.actor.login}
-            </span>
-          </div>
+          ) : (
+            <div className="text-gray-600 dark:text-gray-300">
+              System
+            </div>
+          )}
           <span className="text-gray-500 dark:text-gray-400">
             {timeAgo(workflowRun.updated_at)}
           </span>

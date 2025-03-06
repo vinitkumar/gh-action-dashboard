@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Repository, WorkflowRun } from '@/types/github';
 import RepositoryCard from './RepositoryCard';
 import Footer from './Footer';
-import { APP_CONFIG } from '@/config';
 
 interface DashboardProps {
   token: string;

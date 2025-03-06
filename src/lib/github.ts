@@ -1,4 +1,5 @@
 import { Octokit } from '@octokit/rest';
+import type { Repository, WorkflowRun } from '@/types/github';
 
 interface RateLimitInfo {
   limit: number;
@@ -62,7 +63,7 @@ export async function fetchWorkflowRuns(
   owner: string,
   repo: string,
   per_page = 10
-): Promise<{ data: any, rateLimit: RateLimitInfo }> {
+): Promise<{ data: WorkflowRun[], rateLimit: RateLimitInfo }> {
   const octokit = getOctokit(token);
   
   try {
@@ -88,7 +89,7 @@ export async function fetchOrgRepos(
   token: string,
   org: string,
   per_page = 100
-): Promise<{ data: any, rateLimit: RateLimitInfo }> {
+): Promise<{ data: Repository[], rateLimit: RateLimitInfo }> {
   const octokit = getOctokit(token);
   
   try {
