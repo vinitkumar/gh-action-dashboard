@@ -88,3 +88,9 @@ Make sure to add the `NEXT_PUBLIC_GITHUB_TOKEN` environment variable in your dep
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Copyright
+
+© 2023-2024 django CMS Association. All rights reserved.
+
+For more information about django CMS, visit [https://www.django-cms.org](https://www.django-cms.org)
