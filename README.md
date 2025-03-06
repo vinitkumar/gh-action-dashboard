@@ -1,36 +1,76 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# GitHub Actions Dashboard
+
+A modern dashboard to monitor GitHub Actions workflows across your organization's repositories.
+
+## Features
+
+- View GitHub Actions workflow runs for repositories in your organization
+- Real-time status updates with auto-refresh
+- Secure authentication using GitHub personal access tokens (stored locally)
+- Responsive design for desktop and mobile
+- Dark mode support
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18.x or later
+- npm or yarn
+
+### Installation
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/yourusername/gh-action-dashboard.git
+cd gh-action-dashboard
+```
+
+2. Install dependencies:
+
+```bash
+npm install
+# or
+yarn install
+```
+
+3. Start the development server:
 
 ```bash
 npm run dev
 # or
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+4. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### GitHub Token
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+To use this dashboard, you'll need a GitHub personal access token with the following scopes:
+- `repo` (for private repositories)
+- `workflow` (for GitHub Actions access)
 
-## Learn More
+You can create a token at [GitHub Developer Settings](https://github.com/settings/tokens).
 
-To learn more about Next.js, take a look at the following resources:
+## Environment Variables
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+You can set the following environment variables in a `.env.local` file:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+NEXT_PUBLIC_GITHUB_ORG=your-organization-name
+```
 
-## Deploy on Vercel
+## Deployment
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+This application can be easily deployed to Vercel:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fyourusername%2Fgh-action-dashboard)
+
+## Security
+
+- GitHub tokens are stored only in the browser's localStorage and are never sent to any server other than GitHub's API
+- API requests are made directly from the client to GitHub's API
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
