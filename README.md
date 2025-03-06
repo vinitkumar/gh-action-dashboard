@@ -4,7 +4,9 @@ A modern dashboard to monitor GitHub Actions workflows across the django-cms org
 
 ## Features
 
-- View GitHub Actions workflow runs for repositories in the django-cms organization
+- View GitHub Actions workflow runs for ALL repositories in the django-cms organization
+- Search and filter repositories by name
+- Paginated view for easy navigation through many repositories
 - Real-time status updates with auto-refresh
 - Secure authentication using GitHub personal access tokens (stored in environment variables)
 - Responsive design for desktop and mobile
@@ -62,6 +64,13 @@ You can create a token at [GitHub Developer Settings](https://github.com/setting
 ## Configuration
 
 The dashboard is configured to display GitHub Actions data for the django-cms organization by default. This is hardcoded in the application.
+
+## Usage
+
+- **Search**: Use the search box to filter repositories by name
+- **Pagination**: Navigate through pages of repositories using the pagination controls
+- **Auto-refresh**: Toggle automatic data refresh (every 60 seconds by default)
+- **Manual refresh**: Click the refresh button to update data immediately
 
 ## Deployment
 

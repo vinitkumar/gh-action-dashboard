@@ -20,6 +20,9 @@ const Dashboard: React.FC<DashboardProps> = ({ token, org, onLogout }) => {
   const [error, setError] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
   const [autoRefresh, setAutoRefresh] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const reposPerPage = 20;
   
   const fetchData = async () => {
     setLoading(true);
@@ -29,7 +32,6 @@ const Dashboard: React.FC<DashboardProps> = ({ token, org, onLogout }) => {
       const params = new URLSearchParams({
         token,
         org,
-        limit: '10',
       });
       
       const response = await fetch(`/api/github/actions?${params.toString()}`);
@@ -70,6 +72,20 @@ const Dashboard: React.FC<DashboardProps> = ({ token, org, onLogout }) => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [autoRefresh, token, org]);
+  
+  // Filter repositories by search term
+  const filteredRepositories = repositories.filter(repo => 
+    repo.repository.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+  
+  // Calculate pagination
+  const indexOfLastRepo = currentPage * reposPerPage;
+  const indexOfFirstRepo = indexOfLastRepo - reposPerPage;
+  const currentRepos = filteredRepositories.slice(indexOfFirstRepo, indexOfLastRepo);
+  const totalPages = Math.ceil(filteredRepositories.length / reposPerPage);
+  
+  // Change page
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
   
   return (
     <div className="container mx-auto px-4 py-6">
@@ -127,27 +143,86 @@ const Dashboard: React.FC<DashboardProps> = ({ token, org, onLogout }) => {
         </div>
       )}
       
+      <div className="mb-6">
+        <input
+          type="text"
+          placeholder="Search repositories..."
+          value={searchTerm}
+          onChange={(e) => {
+            setSearchTerm(e.target.value);
+            setCurrentPage(1); // Reset to first page on search
+          }}
+          className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+        />
+      </div>
+      
+      <div className="mb-4">
+        <p className="text-gray-600 dark:text-gray-300">
+          Showing {filteredRepositories.length > 0 ? indexOfFirstRepo + 1 : 0} - {Math.min(indexOfLastRepo, filteredRepositories.length)} of {filteredRepositories.length} repositories
+        </p>
+      </div>
+      
       {loading && repositories.length === 0 ? (
         <div className="flex justify-center items-center h-64">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
         </div>
       ) : (
         <>
-          {repositories.length === 0 ? (
+          {filteredRepositories.length === 0 ? (
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 text-center">
               <p className="text-gray-600 dark:text-gray-300">
-                No repositories found for this organization.
+                {searchTerm ? 'No repositories match your search' : 'No repositories found for this organization'}
               </p>
             </div>
           ) : (
             <div className="space-y-6">
-              {repositories.map((repo) => (
+              {currentRepos.map((repo) => (
                 <RepositoryCard
                   key={repo.repository.id}
                   repository={repo.repository}
                   workflowRuns={repo.workflow_runs}
                 />
               ))}
+            </div>
+          )}
+          
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="flex justify-center mt-8">
+              <ul className="flex space-x-2">
+                <li>
+                  <button
+                    onClick={() => paginate(Math.max(1, currentPage - 1))}
+                    disabled={currentPage === 1}
+                    className="px-3 py-1 rounded border border-gray-300 dark:border-gray-600 disabled:opacity-50"
+                  >
+                    Previous
+                  </button>
+                </li>
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map(number => (
+                  <li key={number}>
+                    <button
+                      onClick={() => paginate(number)}
+                      className={`px-3 py-1 rounded ${
+                        currentPage === number 
+                          ? 'bg-blue-500 text-white' 
+                          : 'bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600'
+                      }`}
+                    >
+                      {number}
+                    </button>
+                  </li>
+                ))}
+                <li>
+                  <button
+                    onClick={() => paginate(Math.min(totalPages, currentPage + 1))}
+                    disabled={currentPage === totalPages}
+                    className="px-3 py-1 rounded border border-gray-300 dark:border-gray-600 disabled:opacity-50"
+                  >
+                    Next
+                  </button>
+                </li>
+              </ul>
             </div>
           )}
         </>

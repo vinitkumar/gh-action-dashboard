@@ -7,7 +7,8 @@ export async function GET(request: NextRequest) {
   const token = searchParams.get('token');
   // Always use the hardcoded organization
   const org = DEFAULT_ORG;
-  const limit = parseInt(searchParams.get('limit') || '5', 10);
+  // Fetch all repos instead of limiting them
+  const per_page = 100; // Maximum allowed by GitHub API
   
   if (!token) {
     return NextResponse.json(
@@ -17,12 +18,11 @@ export async function GET(request: NextRequest) {
   }
   
   try {
-    // Fetch repositories for the organization
-    const repos = await fetchOrgRepos(token, org);
+    // Fetch all repositories for the organization
+    const repos = await fetchOrgRepos(token, org, per_page);
     
-    // Fetch workflow runs for each repository (limited to top repositories)
-    const reposToFetch = repos.slice(0, limit);
-    const workflowRunsPromises = reposToFetch.map(async (repo) => {
+    // Fetch workflow runs for each repository
+    const workflowRunsPromises = repos.map(async (repo) => {
       try {
         const runs = await fetchWorkflowRuns(token, org, repo.name, 5);
         return {

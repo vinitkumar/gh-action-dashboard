@@ -5,8 +5,8 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "GitHub Actions Dashboard",
-  description: "Monitor GitHub Actions workflows across your organization",
+  title: "DjangoCMS Actions Dashboard",
+  description: "To Monitor GitHub Actions workflows across djangoCMS organization",
 };
 
 export default function RootLayout({
