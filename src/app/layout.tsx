@@ -5,8 +5,8 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "GitHub Actions Dashboard",
-  description: "Monitor GitHub Actions workflows across your organization",
+  title: "Django CMS Github Actions Dashboard",
+  description: "Monitor GitHub Actions workflows across your django-cms organization",
   authors: [{ name: "django CMS Association" }],
   creator: "django CMS Association",
   publisher: "django CMS Association",
