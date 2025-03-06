@@ -20,7 +20,6 @@ const Dashboard: React.FC<DashboardProps> = ({ token, org, onLogout }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
-  const [autoRefresh, setAutoRefresh] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const reposPerPage = 20;
@@ -58,22 +57,6 @@ const Dashboard: React.FC<DashboardProps> = ({ token, org, onLogout }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token, org]);
 
-  // Auto-refresh
-  useEffect(() => {
-    let intervalId: NodeJS.Timeout;
-
-    if (autoRefresh) {
-      intervalId = setInterval(() => {
-        fetchData();
-      }, APP_CONFIG.refreshInterval);
-    }
-
-    return () => {
-      if (intervalId) clearInterval(intervalId);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [autoRefresh, token, org]);
-
   // Filter repositories by search term
   const filteredRepositories = repositories.filter(repo =>
     repo.repository.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -107,19 +90,6 @@ const Dashboard: React.FC<DashboardProps> = ({ token, org, onLogout }) => {
                 Last updated: {lastUpdated.toLocaleTimeString()}
               </p>
             )}
-
-            <div className="flex items-center">
-              <label htmlFor="autoRefresh" className="mr-2 text-sm text-gray-600 dark:text-gray-300">
-                Auto-refresh
-              </label>
-              <input
-                id="autoRefresh"
-                type="checkbox"
-                checked={autoRefresh}
-                onChange={() => setAutoRefresh(!autoRefresh)}
-                className="h-4 w-4 text-blue-500 focus:ring-blue-500 border-gray-300 rounded"
-              />
-            </div>
 
             <button
               onClick={fetchData}

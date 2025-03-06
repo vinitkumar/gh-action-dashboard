@@ -19,31 +19,41 @@ export async function GET(request: NextRequest) {
   
   try {
     // Fetch all repositories for the organization
-    const repos = await fetchOrgRepos(token, org, per_page);
+    const { data: repos, rateLimit: reposRateLimit } = await fetchOrgRepos(token, org, per_page);
     
-    // Fetch workflow runs for each repository
-    const workflowRunsPromises = repos.map(async (repo) => {
+    // Process repositories sequentially to respect rate limits
+    const results = [];
+    let currentRateLimit = reposRateLimit;
+    
+    for (const repo of repos) {
       try {
-        const runs = await fetchWorkflowRuns(token, org, repo.name, 5);
-        return {
+        const { data: runs, rateLimit } = await fetchWorkflowRuns(token, org, repo.name, 5);
+        currentRateLimit = rateLimit; // Keep track of the most recent rate limit
+        results.push({
           repository: repo,
           workflow_runs: runs,
-        };
+        });
       } catch (error) {
         console.error(`Error fetching workflow runs for ${repo.name}:`, error);
-        return {
+        results.push({
           repository: repo,
           workflow_runs: [],
           error: 'Failed to fetch workflow runs',
-        };
+        });
       }
-    });
-    
-    const results = await Promise.all(workflowRunsPromises);
+    }
     
     return NextResponse.json({
       organization: org,
       repositories: results,
+      rate_limit: {
+        limit: currentRateLimit.limit,
+        remaining: currentRateLimit.remaining,
+        reset: currentRateLimit.reset,
+        used: currentRateLimit.used,
+        enterprise_limit: currentRateLimit.limit === 15000,
+      },
+      _rate_limit_info: `Your token has a ${currentRateLimit.limit === 15000 ? 'GitHub Enterprise Cloud' : 'standard'} rate limit of ${currentRateLimit.limit} requests per hour. ${currentRateLimit.remaining} requests remaining, resets at ${currentRateLimit.reset.toLocaleString()}`
     });
   } catch (error) {
     console.error('Error fetching GitHub Actions data:', error);

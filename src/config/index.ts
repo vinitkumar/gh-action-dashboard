@@ -18,6 +18,5 @@ export const APP_CONFIG = {
     error: '#ef4444', // Red
     warning: '#f59e0b', // Amber
     info: '#3b82f6', // Blue
-  },
-  refreshInterval: 60000, // 1 minute
+  }
 };
