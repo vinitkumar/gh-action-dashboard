@@ -1,3 +1,22 @@
+// Format duration in seconds to a human-readable string
+export function formatDuration(seconds: number): string {
+  if (seconds < 60) {
+    return `${Math.ceil(seconds)} seconds`;
+  }
+
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = Math.ceil(seconds % 60);
+
+  if (minutes < 60) {
+    return `${minutes} minute${minutes > 1 ? 's' : ''} ${remainingSeconds} second${remainingSeconds !== 1 ? 's' : ''}`;
+  }
+
+  const hours = Math.floor(minutes / 60);
+  const remainingMinutes = minutes % 60;
+
+  return `${hours} hour${hours > 1 ? 's' : ''} ${remainingMinutes} minute${remainingMinutes !== 1 ? 's' : ''}`;
+}
+
 // Format date to a readable format
 export function formatDate(dateString: string | null | undefined): string {
   if (!dateString) {
@@ -18,36 +37,36 @@ export function timeAgo(dateString: string | null | undefined): string {
   if (!dateString) {
     return 'Never';
   }
-  
+
   const date = new Date(dateString);
   const now = new Date();
   const seconds = Math.floor((now.getTime() - date.getTime()) / 1000);
-  
+
   let interval = Math.floor(seconds / 31536000);
   if (interval >= 1) {
     return interval === 1 ? '1 year ago' : `${interval} years ago`;
   }
-  
+
   interval = Math.floor(seconds / 2592000);
   if (interval >= 1) {
     return interval === 1 ? '1 month ago' : `${interval} months ago`;
   }
-  
+
   interval = Math.floor(seconds / 86400);
   if (interval >= 1) {
     return interval === 1 ? '1 day ago' : `${interval} days ago`;
   }
-  
+
   interval = Math.floor(seconds / 3600);
   if (interval >= 1) {
     return interval === 1 ? '1 hour ago' : `${interval} hours ago`;
   }
-  
+
   interval = Math.floor(seconds / 60);
   if (interval >= 1) {
     return interval === 1 ? '1 minute ago' : `${interval} minutes ago`;
   }
-  
+
   return seconds < 10 ? 'just now' : `${Math.floor(seconds)} seconds ago`;
 }
 
@@ -56,7 +75,7 @@ export function getStatusColor(status: string | null, conclusion: string | null)
   if (!status) {
     return 'bg-gray-500';
   }
-  
+
   if (status === 'completed') {
     switch (conclusion) {
       case 'success':
@@ -77,7 +96,7 @@ export function getStatusColor(status: string | null, conclusion: string | null)
   } else if (status === 'queued') {
     return 'bg-purple-500';
   }
-  
+
   return 'bg-gray-500';
 }
 
@@ -92,7 +111,7 @@ export function getStatusIcon(status: string | null, conclusion: string | null):
   if (!status) {
     return '❓';
   }
-  
+
   if (status === 'completed') {
     switch (conclusion) {
       case 'success':
@@ -113,6 +132,6 @@ export function getStatusIcon(status: string | null, conclusion: string | null):
   } else if (status === 'queued') {
     return '⏳';
   }
-  
+
   return '❓';
-} 
+}
